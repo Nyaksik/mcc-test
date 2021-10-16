@@ -16,6 +16,10 @@
     align-items: flex-start;
 }
 
+.node-block__main:hover {
+    cursor: pointer;
+}
+
 .main__node-block {
     margin-left: 10px;
     display: flex;
@@ -24,10 +28,14 @@
 }
 
 .node {
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
-.btn:active {
+.node:hover {
+    cursor: pointer;
+}
+
+.btn:focus {
     background-color: black;
     color: greenyellow;
 }

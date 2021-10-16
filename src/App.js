@@ -2,22 +2,28 @@ import { useState } from 'react';
 
 import './App.css';
 
+function Node(id, name, children) {
+    this.id = id
+    this.name = name
+    this.children = children || []
+}
+
 function App() {
     const [mainNode, setMainNode] = useState([])
     const [choice, setChoice] = useState({do: '', node: 'MAIN'})
     const [input, setInput] = useState('')
-    const [click, setClick] = useState()
+    const [click, setClick] = useState(null)
 
     const clickUser = () => {
         switch (choice.do) {
             case 'ADD':
                 choice.node === 'MAIN'
                 ?
-                setMainNode([...mainNode, {id: Math.floor(Math.random() * 10000), name: input, children: []}])
+                setMainNode([...mainNode, new Node(Math.floor(Math.random() * 10000), input)])
                 :
                 setMainNode(mainNode.map((it) => {
                     if (it.id === click) {
-                        return {...it, children: [...it.children, {id: Math.floor(Math.random() * 10000), name: input, children: []}]}
+                        return {...it, children: [...it.children, new Node(Math.floor(Math.random() * 10000), input)]}
                     }
                     return it
                 }))
@@ -38,6 +44,54 @@ function App() {
                 break
         }
     }
+
+    function drawNode(arrData) {
+        return arrData.map((it) => {
+            if (it.children.length > 0) {
+                return (
+                    <div
+                    className='node node-block__node'
+                    key={it.id}
+                    onClick={() =>
+                        {   
+                            setClick(it.id)
+                            setChoice({...choice, node: it.name})
+                        }
+                        }
+                    >
+                        {it.name}
+                        <div
+                        className='node node-block__node'
+                        key={it.id}
+                        onClick={() =>
+                            {   
+                                setClick(it.id)
+                                setChoice({...choice, node: it.name})
+                            }
+                            }
+                        >
+                        {drawNode(it.children)}
+                        </div>
+                    </div>
+                )
+            }
+            return (
+                <div
+                className='node node-block__node'
+                key={it.id}
+                onClick={() =>
+                    {   
+                        setClick(it.id)
+                        setChoice({...choice, node: it.name})
+                    }
+                    }
+                >
+                    {it.name}
+                </div>
+            )
+        })
+    }
+    
     console.log(click)
 
     return (
@@ -45,40 +99,14 @@ function App() {
             <div className="App">
                 <div className='main'>
                     <div className='node-block main__node-block'>
-                        <div onClick={() => setChoice({...choice, node: 'MAIN'})}>Main:</div>
-                        {mainNode.map((it) => <div
-                        className='node node-block__node'
-                        key={Math.random()}
-                        onClick={() =>
-                        {   
-                            setClick(it.id)
-                            setChoice({...choice, node: it.name})
-                        }
-                        }
-                        >
-                            {it.name}
-                            {it.children.map((it) => <div
-                            className='node node-block__node'
-                            key={Math.random()}
-                            onClick={() =>
-                            {   
-                                setClick(it.id)
-                                setChoice({...choice, node: it.name})
-                            }
-                            }
-                            >
-                                {it.name}
-                            </div>)}
-                        </div>)}
+                        <div className='node-block__main' onClick={() => setChoice({...choice, node: 'MAIN'})}>Main:</div>
+                        {drawNode(mainNode)}
                     </div>
                 </div>
                 <button
                     className='btn'
                     type='button'
-                    onClick={(e) => {
-                        setChoice({...choice, do: e.target.value})
-                    }
-                    }
+                    onClick={(e) => setChoice({...choice, do: e.target.value})}
                     value='ADD'
                 >
                     Add
@@ -86,10 +114,7 @@ function App() {
                 <button
                     className='btn'
                     type='button'
-                    onClick={(e) => {
-                        setChoice({...choice, do: e.target.value})
-                    }
-                    }
+                    onClick={(e) => setChoice({...choice, do: e.target.value})}
                     value='REMOVE'
                 >
                     Remove
@@ -97,10 +122,7 @@ function App() {
                 <button
                     className='btn'
                     type='button'
-                    onClick={(e) => {
-                        setChoice({...choice, do: e.target.value})
-                    }
-                    }
+                    onClick={(e) => setChoice({...choice, do: e.target.value})}
                     value='EDIT'
                 >
                     Edit
@@ -108,10 +130,7 @@ function App() {
                 <button
                     className='btn'
                     type='button'
-                    onClick={(e) => {
-                        setChoice({...choice, do: e.target.value})
-                    }
-                    }
+                    onClick={(e) => setChoice({...choice, do: e.target.value})}
                     value='RESET'
                 >
                     Reset
@@ -122,7 +141,12 @@ function App() {
                     ?
                     <div>
                         <div>Action: {choice.do} Node: {choice.node}</div>
-                        <input onChange={(e) => setInput(e.target.value)} value={input} placeholder='Enter the node name' />
+                        {(choice.do === 'REMOVE' || choice.do === 'RESET')
+                        ?
+                        <div></div>
+                        :
+                        <input onChange={(e) => setInput(e.target.value)} value={input} placeholder='Enter the node name' maxLength='10' />
+                        }        
                         <button className='btn' type='button' onClick={clickUser}>Apply</button>
                     </div>
                     :
