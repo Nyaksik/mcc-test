@@ -27,8 +27,13 @@
     align-items: flex-start;
 }
 
+.root:hover {
+    cursor: pointer;
+}
+
 .node {
-    margin-left: 10px;
+    position: relative;
+    left: 25px;
 }
 
 .node:hover {
