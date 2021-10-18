@@ -25,16 +25,14 @@ function App() {
                 it.children.push(new Node(Math.floor(Math.random() * 10000), input))
             }
             addNode(it.children, id)
-        });
+        })
     }
 
     function removeNode(arr, id) {
         arr.forEach((it, index) => {
             if (it.id === id) {
-                console.log('удаление')
-                arr.slice(index, 1)
+                arr.splice(index, 1)
             }
-            console.log('повтор')
             removeNode(it.children, id)
         })
     }
@@ -48,7 +46,7 @@ function App() {
         })
     }
 
-    const clickUser = () => {
+    function clickUser() {
         switch (choice.do) {
             case 'ADD':
                 if (click === 'ROOT') {
@@ -57,28 +55,29 @@ function App() {
                     addNode(mainNode.children, click)
                     setMainNode(mainNode)
                 }
+                setChoice({do: '', node: ''})
                 setInput('')
                 break
             case 'REMOVE':
                 removeNode(mainNode.children, click)
                 setMainNode(mainNode)
+                setChoice({do: '', node: ''})
                 break
             case 'EDIT':
                 editNode(mainNode.children, click)
                 setMainNode(mainNode)
+                setChoice({do: '', node: ''})
                 setInput('')
                 break
             case "RESET":
                 setMainNode({id: 'ROOT', name: 'Root:', children: []})
-                setChoice({...choice, do: '', node: ''})
+                setChoice({do: '', node: ''})
                 break
             default:
                 setMainNode(mainNode)
                 break
         }
     }
-
-    console.log(mainNode)
 
     return (
         <div>
@@ -116,7 +115,7 @@ function App() {
                 <button
                     className='btn'
                     type='button'
-                    onClick={(e) => setChoice({...choice, do: e.target.value})}
+                    onClick={(e) => setChoice({do: e.target.value, node: 'Root:'})}
                     value='RESET'
                 >
                     Reset
@@ -136,7 +135,7 @@ function App() {
                         <button className='btn' type='button' onClick={clickUser}>Apply</button>
                     </div>
                     :
-                    <p>Select a branch and action</p>
+                    <p>Select the node and action</p>
                     }
                 </div>
         </div>

@@ -34,10 +34,6 @@
     text-align: start;
 }
 
-.node:hover {
-    cursor: pointer;
-}
-
 .btn:focus {
     background-color: black;
     color: greenyellow;
