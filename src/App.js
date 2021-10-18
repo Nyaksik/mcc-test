@@ -20,31 +20,33 @@ function App() {
     }
 
     function addNode(arr, id) {
-        return arr.children.map((it) => {
+        return arr.map((it) => {
             if (it.id === id) {
-                return {...it, children: [...it.children, new Node(Math.floor(Math.random() * 10000), input)]}
+                it.children.push(new Node(Math.floor(Math.random() * 10000), input))
+                return it
             }
-            addNode(it, id)
+            addNode(it.children, id)
             return it
         });
     }
 
     function removeNode(arr, id) {
-        return arr.children.filter((it) => {
+        return arr.filter((it) => {
             if (it.id === id) {
-                return
+                return false
             }
-            removeNode(it, id)
-            return it
+            removeNode(it.children, id)
+            return true
         })
     }
 
     function editNode(arr, id) {
-        return arr.children.map((it) => {
+        return arr.map((it) => {
             if (it.id === id) {
-                return {...it, name: input}
+                it.name = input
+                return it
             }
-            editNode(it, id)
+            editNode(it.children, id)
             return it
         })
     }
@@ -55,15 +57,15 @@ function App() {
                 if (click === 'ROOT') {
                     setMainNode({...mainNode, children: [...mainNode.children, new Node(Math.floor(Math.random() * 10000), input)]})
                 } else {
-                    setMainNode({...mainNode, children: [...addNode(mainNode, click)]})
+                    setMainNode({...mainNode, children: [...addNode(mainNode.children, click)]})
                 }
                 setInput('')
                 break
             case 'REMOVE':
-                setMainNode({...mainNode, children: [...removeNode(mainNode, click)]})
+                setMainNode({...mainNode, children: [...removeNode(mainNode.children, click)]})
                 break
             case 'EDIT':
-                setMainNode({...mainNode, children: [...editNode(mainNode, click)]})
+                setMainNode({...mainNode, children: [...editNode(mainNode.children, click)]})
                 break
             case "RESET":
                 setMainNode({id: 'ROOT', name: 'Root:', children: []})
@@ -74,6 +76,8 @@ function App() {
                 break
         }
     }
+
+    console.log(mainNode)
 
     return (
         <div>
