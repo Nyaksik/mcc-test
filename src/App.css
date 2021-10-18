@@ -11,17 +11,12 @@
     height: 500px;
     margin: 20px auto 0 auto;
     border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    text-align: start;
 }
 
-.main__block {
-    margin-left: 10px;
-}
-
-.node-block__main:hover {
-    cursor: pointer;
+.root {
+    padding-top: 10px;
+    padding-left: 10px;
 }
 
 .root:hover {
@@ -32,6 +27,13 @@
     position: relative;
     left: 25px;
     text-align: start;
+    border-left: 1px solid black;
+    padding-left: 10px;
+    transition: 0.2s border-left;
+}
+
+.node:focus {
+    border-left: 3px solid black;
 }
 
 .btn:focus {
